@@ -1,34 +1,9 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-session_start();
-require __DIR__ . '/login_pgs/config.php';
-
-$pageTitle = "Home Page";
-
-if (isset($_SESSION['user_id'])) {
-    $stmt = $pdo->prepare("UPDATE users SET last_active = NOW() WHERE id = ?");
-    $stmt->execute([$_SESSION['user_id']]);
-}
-
-$videoDir = __DIR__ . '/videos';
-$videoFiles = glob($videoDir . '/*.mp4');
-$randomVideoUrl = '';
-
-if ($videoFiles) {
-  $randomVideo = $videoFiles[array_rand($videoFiles)];
-  $randomVideoUrl = 'videos/' . basename($randomVideo);
-}
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>INDEX PAGE</title>
+  <title>INFORMATION</title>
   <style>
-    /* Базовая настройка flex-колонки */
     html, body {
       height: 100%;
       margin: 0;
@@ -38,7 +13,6 @@ if ($videoFiles) {
       font-family: 'Comic Sans MS', cursive, sans-serif;
     }
 
-    /* Фон страницы */
     body::before {
       content: "";
       position: fixed;
@@ -51,13 +25,13 @@ if ($videoFiles) {
       z-index: -1;
       filter: blur(10px);
     }
+
     @keyframes pastelFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* Фиксированная шапка */
     .site-header {
       position: fixed;
       top: 20px; left: 50%;
@@ -67,290 +41,25 @@ if ($videoFiles) {
       background-color: rgba(255, 248, 240, 0.85);
       border-radius: 30px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       padding: 0 20px;
       z-index: 9999;
       box-shadow: 0 8px 20px rgba(0,0,0,0.05);
       backdrop-filter: blur(8px);
     }
-    .header-left .back-btn {
-      background-color: #ffcccc;
-      color: #5C4033;
-      border: none; border-radius: 20px;
-      padding: 10px 16px; font-size: 14px;
-      font-weight: bold; cursor: pointer;
-    }
-    .center {
-      font-size: 24px; font-weight: bold;
-      color: #5C4033; text-transform: uppercase;
-    }
-    .header-right {
-      display: flex; align-items: center; gap: 16px;
-    }
-    .back-button {
-      display: inline-block;
-      margin: 0 5px;
-      padding: 8px 12px;
-      background-color: #f9e3d3;
-      border-radius: 20px;
-      color: #5C4033;
+
+    .site-header .center {
+      font-size: 24px;
       font-weight: bold;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
+      color: #5C4033;
+      text-transform: uppercase;
     }
-    .back-button:hover {
-      background-color: #f3d5c0;
-    }
-    .avatar-container {
-      background-color: #f5d9b0;
-      border-radius: 30px;
-      padding: 3px 10px 3px 6px;
-      display: flex; align-items: center;
-      transition: background 0.2s;
-    }
-    .avatar-container:hover { background-color: #eec99c; }
-    .avatar-small {
-      width: 32px; height: 32px;
-      border-radius: 50%; object-fit: cover;
-    }
-
-    /* Основной контент, центрируется и растягивается */
-    main.main-content {
-      flex: 1 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-top: 100px; /* место под шапку */
-    }
-    .glow-box {
-      background-color: #FFFAFA;
-      padding: 30px 60px;
-      border-radius: 35px;
-      box-shadow: 0 0 30px rgba(255,250,250,0.6);
-      text-align: center;
-    }
-    .glow-box h1 {
-      font-size: 120px; color: #5C4033; margin: 0;
-    }
-    .glow-box p {
-      font-size: 20px; color: #3D2B1F;
-      margin: 10px 0 20px;
-    }
-
-    /* Уведомления */
-    #notificationBox {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #fff7f0;
-      border-radius: 15px;
-      border: 2px solid #f3d5c0;
-      color: #3D2B1F;
-      max-height: 200px;
-      overflow-y: auto;
-      text-align: left;
-    }
-
-    /* Кнопка Ko-fi iframe */
-    iframe#kofiframe {
-      border: none;
-      width: 100%;
-      max-width: 400px;
-      height: 412px;
-      background: #f9f9f9;
-    }
-
-    /* Медиа-запрос для телефонов */
-    @media (max-width: 768px) {
-      .glow-box { width: 90%; padding: 20px 10px; }
-      .glow-box h1 { font-size: 48px; }
-      .glow-box p { font-size: 18px; }
-      .site-header { flex-direction: column; height: auto; padding: 10px; }
-      .header-left, .center, .header-right { margin: 5px 0; }
-      .header-left .back-btn, .back-button { padding: 8px 12px; font-size: 14px; }
-      .avatar-small { width: 28px; height: 28px; }
-      iframe#kofiframe { height: 300px; }
-    }
-
-    /* Стили футера */
-    footer.site-footer {
-      background: transparent;
-      padding: 80px 30px 20px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-    .footer-divider {
-      width: 100%; height: 3px;
-      background-color: white;
-      border-radius: 4px;
-      margin-bottom: 30px;
-    }
-    .footer-content {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-    .footer-section {
-      flex: 1 1 180px;
-      min-width: 150px;
-    }
-    .footer-logo-img {
-      width: 64px; height: 64px;
-      border-radius: 50%;
-      border: 4px solid white;
-      margin-bottom: 10px;
-    }
-    .footer-site-name {
-      color: white; font-weight: bold; font-size: 20px; margin: 0;
-    }
-    .footer-icon {
-      width: 32px; height: 32px; margin: 0 6px;
-    }
-    .footer-contact,
-    .footer-link,
-    .footer-version {
-      color: white; font-size: 14px;
-      text-decoration: none; display: block; margin: 6px 0;
-    }
-    .footer-link:hover { text-decoration: underline; }
-
-    video {
-      max-height: 80vh;
-      width: auto;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    .next-video-btn {
-      margin-top: 20px;
-      background: #ff85b3;
-      border: none;
-      color: white;
-      font-size: 20px;
-      padding: 10px 20px;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 5px #d46795;
-    }
-    .next-video-btn:active {
-      box-shadow: none;
-      transform: translateY(2px);
-    }
-
-    
   </style>
-
-  <script>
-    function loadNotifications() {
-      fetch('/inbox/fetch_notifications.php')
-        .then(r=>r.json())
-        .then(data=>{
-          const box = document.getElementById('notificationBox');
-          box.innerHTML = '';
-          if (!data.length) return alert('Нет новых уведомлений');
-          data.forEach(msg=>{
-            let div = document.createElement('div');
-            div.innerHTML = `<strong>${msg.username}</strong>: ${msg.message}`;
-            box.appendChild(div);
-          });
-          box.style.display = 'block';
-        }).catch(console.error);
-    }
-  </script>
 </head>
 <body>
-
   <div class="site-header">
-    <div class="header-left">
-    </div>
-    <div class="center"><?= htmlspecialchars($pageTitle) ?></div>
-    <div class="header-right">
-      <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
-      <script>
-        kofiWidgetOverlay.draw('m1tsun3ko', {
-          'type':'floating-chat',
-          'floating-chat.donateButton.text':'Support Us',
-          'floating-chat.donateButton.background-color':'#ff5f5f',
-          'floating-chat.donateButton.text-color':'#fff'
-        });
-      </script>
-      <a href="/home.php" class="back-button">Home</a>
-      <a href="/inbox/inbox.php" class="back-button">Inbox</a>
-      <a onclick="loadNotifications()" class="back-button">Notifications</a>
-      <a onclick="location.reload()" class="back-button">Refresh</a>
-      <a href="/login_pgs/dashboard.php" class="avatar-container">
-        <img src="/login_pgs/avatar.php?id=<?= $_SESSION['user_id'] ?>" class="avatar-small" alt="Me">
-      </a>
-    </div>
-    <div id="notificationBox"></div>
+    <div class="center">INFORMATION</div>
   </div>
-
-  <main class="main-content">
-    <div class="glow-box">
-    <video id="tiktokVideo" autoplay muted controls>
-    <source src="<?= htmlspecialchars($randomVideoUrl) ?>" type="video/mp4">
-    Ваш браузер не поддерживает видео.
-  </video>
-
-  <script>
-    function loadRandomVideo() {
-      fetch('get_random_video.php')
-        .then(res => res.json())
-        .then(data => {
-          if (data.url) {
-            const video = document.getElementById('tiktokVideo');
-            video.pause();
-            video.querySelector('source').src = data.url;
-            video.load();
-            video.play();
-          } else {
-            alert('Видео не найдены.');
-          }
-        });
-    }
-
-    document.getElementById('nextVideoBtn').addEventListener('click', loadRandomVideo);
-
-    let startX = 0;
-    document.getElementById('tiktokVideo').addEventListener('touchstart', e => {
-      startX = e.changedTouches[0].screenX;
-    });
-    document.getElementById('tiktokVideo').addEventListener('touchend', e => {
-      let endX = e.changedTouches[0].screenX;
-      if (startX - endX > 50) {
-        loadRandomVideo();
-      }
-    });
-  </script>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-divider"></div>
-    <div class="footer-content">
-      <div class="footer-section">
-        <img src="/assets/logo.png" alt="Logo" class="footer-logo-img">
-        <p class="footer-site-name">m1tsun3ko</p>
-      </div>
-      <div class="footer-section footer-socials">
-        <a href="https://tiktok.com" target="_blank"><img src="/assets/icons/tiktok.png" class="footer-icon" alt=""></a>
-        <a href="https://youtube.com" target="_blank"><img src="/assets/icons/youtube.png" class="footer-icon" alt=""></a>
-        <a href="https://instagram.com" target="_blank"><img src="/assets/icons/instagram.png" class="footer-icon" alt=""></a>
-      </div>
-      <div class="footer-section">
-        <a href="mailto:contact@yoursite.com" class="footer-contact">Contact Us</a>
-      </div>
-      <div class="footer-section">
-        <p class="footer-version">Version: <span><?= SITE_VERSION ?></span></p>
-      </div>
-      <div class="footer-section">
-        <a href="terms_of_service.html" class="footer-link">Terms of Service</a>
-        <a href="community_guidelines.html" class="footer-link">Community Guidelines</a>
-      </div>
-    </div>
-  </footer>
-
 </body>
 </html>
