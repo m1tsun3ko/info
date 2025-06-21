@@ -11,7 +11,7 @@
       padding: 0;
       font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
     }
-  
+
     body::before {
       content: "";
       position: fixed;
@@ -46,6 +46,7 @@
       z-index: 9999;
       box-shadow: 0 8px 20px rgba(0,0,0,0.05);
       backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
     }
 
     .site-header .center-text {
@@ -54,6 +55,20 @@
       color: #5C4033;
       text-transform: uppercase;
       letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    /* 📱 Очень большая шапка на телефонах */
+    @media (max-width: 768px) {
+      .site-header {
+        height: 100px;
+        border-radius: 40px;
+        padding: 0 30px;
+      }
+
+      .site-header .center-text {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
