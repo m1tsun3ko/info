@@ -1,31 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>INFORMATION</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
   <style>
     html, body {
-      height: 100%;
       margin: 0;
       padding: 0;
-      font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle at center,
-        #ff8f57, #ff73a4, #ff9e5e, #ffaa5b, #ff68a4, #ff845c);
+      font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+      background: radial-gradient(circle at center, #ff8f57, #ff73a4, #ff9e5e, #ffaa5b, #ff68a4, #ff845c);
       background-size: 400% 400%;
       animation: pastelFlow 60s ease infinite;
-      z-index: -1;
-      filter: blur(10px);
+      height: 100%;
+      overflow-x: hidden;
     }
 
     @keyframes pastelFlow {
@@ -50,7 +39,7 @@
       backdrop-filter: blur(8px);
     }
 
-    .site-header .center-text {
+    .center-text {
       font-size: 24px;
       font-weight: bold;
       color: #5C4033;
@@ -60,100 +49,129 @@
 
     @media (max-width: 768px) {
       .site-header {
-        height: 200px;
-        padding: 0 30px;
+        height: 140px;
         border-bottom-left-radius: 40px;
         border-bottom-right-radius: 40px;
       }
-      .site-header .center-text {
-        font-size: 42px;
+
+      .center-text {
+        font-size: 38px;
       }
     }
 
-    .gallery-box {
-      margin-top: 100px;
-      background-color: rgba(255, 248, 240, 0.85);
-      border-radius: 30px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-      padding: 20px;
+    .gallery-wrapper {
+      margin-top: 120px;
       max-width: 90%;
-      width: 800px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba(255, 248, 240, 0.8);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    .image-container {
+    .viewer-title {
+      font-size: 18px;
+      color: #5c4033;
+      margin-bottom: 10px;
+    }
+
+    .slider-container {
       position: relative;
-      width: 100%;
-      max-height: 80vh;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.4s ease;
+    }
+
+    .slide {
+      min-width: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .image-container img {
-      width: 100%;
-      border-radius: 20px;
-      object-fit: contain;
-      max-height: 70vh;
+    .slide.active {
+      opacity: 1;
     }
 
-    .nav-button {
+    .slide img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 12px;
+    }
+
+    .nav-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: rgba(255, 200, 200, 0.6);
+      background-color: rgba(255, 182, 193, 0.1);
       border: none;
-      border-radius: 50%;
-      padding: 10px 15px;
-      font-size: 28px;
-      color: #5C4033;
+      width: 32px;
+      height: 70px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
-      user-select: none;
+      z-index: 10;
+      transition: background-color 0.2s;
     }
 
-    .nav-button:hover {
-      background-color: rgba(255, 200, 200, 0.9);
+    .nav-btn:hover,
+    .nav-btn:active {
+      background-color: rgba(255, 182, 193, 0.8);
     }
 
-    .nav-button.left {
+    .nav-btn.left {
       left: 10px;
     }
 
-    .nav-button.right {
+    .nav-btn.right {
       right: 10px;
     }
 
-    .divider {
-      width: 100%;
-      height: 2px;
-      background-color: #5C4033;
-      margin: 15px 0 5px;
+    .filename {
+      text-align: center;
+      font-size: 16px;
+      color: #5c4033;
+      border-top: 2px solid #5c4033;
+      padding-top: 6px;
+      margin-top: 10px;
     }
 
-    .filename {
-      font-size: 18px;
-      color: #5C4033;
-      text-align: center;
-      word-break: break-all;
+    @media (max-width: 600px) {
+      .gallery-wrapper {
+        padding: 16px;
+      }
+
+      .nav-btn {
+        width: 26px;
+        height: 60px;
+      }
+
+      .slide img {
+        max-height: 50vh;
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="site-header">
     <div class="center-text">INFORMATION</div>
   </div>
 
-  <div class="gallery-box">
-    <div class="image-container">
-      <button class="nav-button left" onclick="prevImage()">&#10094;</button>
-      <img id="galleryImage" src="" alt="image viewer">
-      <button class="nav-button right" onclick="nextImage()">&#10095;</button>
+  <div class="gallery-wrapper">
+    <div class="viewer-title">image viewer</div>
+    <div class="slider-container">
+      <div class="slider" id="slider"></div>
+      <button class="nav-btn left" onclick="prevSlide()">‹</button>
+      <button class="nav-btn right" onclick="nextSlide()">›</button>
     </div>
-    <div class="divider"></div>
-    <div class="filename" id="filename">Loading...</div>
+    <div class="filename" id="filename"></div>
   </div>
 
   <script>
@@ -161,35 +179,81 @@
       "gallery/image1.jpg",
       "gallery/image2.jpg",
       "gallery/image3.jpg"
-      // Добавь свои пути к изображениям
     ];
 
     let currentIndex = 0;
+    const slider = document.getElementById('slider');
+    const filenameText = document.getElementById('filename');
 
-    const galleryImage = document.getElementById('galleryImage');
-    const filename = document.getElementById('filename');
-
-    function showImage(index) {
-      galleryImage.src = images[index];
-      filename.textContent = images[index].split('/').pop();
+    function createSlides() {
+      images.forEach((src, index) => {
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+        if (index === 0) slide.classList.add('active');
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = "slide";
+        slide.appendChild(img);
+        slider.appendChild(slide);
+      });
+      updateFilename();
     }
 
-    function nextImage() {
-      if (currentIndex < images.length - 1) {
-        currentIndex++;
-        showImage(currentIndex);
-      }
+    function updateSlides() {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active');
+        if (index === currentIndex) {
+          slide.classList.add('active');
+        }
+      });
+      updateFilename();
     }
 
-    function prevImage() {
+    function updateFilename() {
+      filenameText.textContent = images[currentIndex].split('/').pop();
+    }
+
+    function prevSlide() {
       if (currentIndex > 0) {
         currentIndex--;
-        showImage(currentIndex);
+        updateSlides();
       }
     }
 
-    // Инициализация
-    showImage(currentIndex);
+    function nextSlide() {
+      if (currentIndex < images.length - 1) {
+        currentIndex++;
+        updateSlides();
+      }
+    }
+
+    // Свайпы на телефоне
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slider.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const diff = touchStartX - touchEndX;
+      const minSwipeDistance = 30;
+      if (Math.abs(diff) > minSwipeDistance) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }
+
+    createSlides();
   </script>
 </body>
 </html>
