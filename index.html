@@ -1,27 +1,36 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>INFORMATION</title>
+  <title>m1tsun3ko.lol - Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Comic Sans MS';
+      src: url('/fonts/comic_sans_ms.woff2') format('woff2');
+    }
+
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
     }
-    
 
-    
     body::before {
       content: "";
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle at center,
-        #ff8f57, #ff73a4, #ff9e5e, #ffaa5b, #ff68a4, #ff845c);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #ff8f57, #ff73a4, #ff9e5e, #ffaa5b, #ff68a4, #ff845c);
       background-size: 400% 400%;
       animation: pastelFlow 60s ease infinite;
       z-index: -1;
@@ -34,101 +43,150 @@
       100% { background-position: 0% 50%; }
     }
 
-    .site-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100px;
-      background-color: rgba(255, 248, 240, 0.95);
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
+    .top-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      text-decoration: none;
+      background: #f9e3d3;
+      color: #5C4033;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .glow-box {
+      background-color: #f9e3d3;
+      padding: 30px;
+      border-radius: 35px;
+      box-shadow: 0 0 30px rgba(255, 250, 250, 0.6);
+      max-width: 90vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .image-container {
+      position: relative;
+      width: 90vw;
+      max-width: 600px;
+      height: 60vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      backdrop-filter: blur(8px);
     }
 
-    .site-header .center-text {
-      font-size: 48px;
-      font-weight: bold;
-      color: #5C4033;
-      letter-spacing: 1.5px;
-      text-shadow: 2px 2px 0 #fff;
-    }
-
-    /* Контент под шапкой */
-    .content {
-      padding-top: 220px;
-      text-align: center;
-      color: white;
-      font-size: 18px;
-      font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-    }
-
-        .glow-box {
-      background-color: #FFFAFA;
-      padding: 30px 60px;
-      border-radius: 35px;
-      box-shado
-
-              a.back-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 20px;
-      background-color: #f9e3d3;
+    .image-container img {
+      max-width: 100%;
+      max-height: 100%;
       border-radius: 20px;
-      text-decoration: none;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.6);
+      border: none;
+      font-size: 30px;
+      padding: 5px 15px;
+      cursor: pointer;
       color: #5C4033;
       font-weight: bold;
-      transition: background 0.3s;
+      border-radius: 10px;
+      z-index: 1;
     }
 
-    a.back-button:hover {
-      background-color: #f3d5c0;
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.9);
     }
 
-              h1 {
-      font-size: 120px;
-      color: #5C4033;
-      margin: 0;
+    .nav-left {
+      left: 10px;
     }
 
-    p {
-      font-size: 20px;
+    .nav-right {
+      right: 10px;
+    }
+
+    .divider {
+      width: 100%;
+      height: 2px;
+      background-color: #5C4033;
+      margin: 15px 0;
+    }
+
+    .filename {
+      font-size: 16px;
+      color: #3D2B1F;
+    }
+
+    .footer {
+      font-size: 14px;
       color: #3D2B1F;
       margin-top: 10px;
     }
 
-              @keyframes pastelFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @media screen and (max-width: 600px) {
+      .nav-button {
+        font-size: 24px;
+        padding: 5px 10px;
+      }
+      .glow-box {
+        padding: 15px;
+      }
     }
-          
   </style>
 </head>
 <body>
-
-  <div class="site-header">
-    <div class="center-text">INFORMATION</div>
+  <a href="https://lol.m1tsun3ko.lol" class="top-link">LINK’S PAGE</a>
+  <div class="glow-box">
+    <div class="image-container">
+      <button class="nav-button nav-left" onclick="prevImage()">‹</button>
+      <img id="galleryImage" src="images/1.jpg" alt="Portfolio image">
+      <button class="nav-button nav-right" onclick="nextImage()">›</button>
+    </div>
+    <div class="divider"></div>
+    <div class="filename" id="filename">images/1.jpg</div>
+    <div class="footer">Last update – 22.06.2025</div>
   </div>
 
-  <div class="content">
-    <p>🌈 Welcome!</p>
-    <p>coming soon...</p>
-    <p>last changes - 22.06.25</p>
-  </div>
+  <script>
+    const images = [
+      'images/1.png',
+      'images/2.png',
+      'images/3.png',
+      'images/4.png'
+      // добавь сюда больше файлов по мере загрузки
+    ];
 
+    let currentIndex = 0;
 
-    <div class="glow-box">
-    <h1>INDEX</h1>
-    <p>site in works</p>
-    <a href="/login" class="back-button">&lt; login</a>
-    <a href="/reg" class="back-button">&lt; reg</a>
-  </div>
+    function updateImage() {
+      const img = document.getElementById('galleryImage');
+      const name = document.getElementById('filename');
+      img.src = images[currentIndex];
+      name.textContent = images[currentIndex];
+    }
 
+    function nextImage() {
+      if (currentIndex < images.length - 1) {
+        currentIndex++;
+        updateImage();
+      }
+    }
+
+    function prevImage() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateImage();
+      }
+    }
+
+    updateImage();
+  </script>
 </body>
 </html>
