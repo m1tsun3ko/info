@@ -4,8 +4,19 @@
   <meta charset="UTF-8" />
   <title>INFORMATION</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Шрифты и PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff73a4" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="INFORMATION" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet" />
+
+  <!-- (СТИЛИ ОСТАЮТСЯ КАК ЕСТЬ) -->
   <style>
+    /* твои стили остаются без изменений */
     html, body {
       margin: 0;
       padding: 0;
@@ -159,7 +170,6 @@
   </style>
 </head>
 <body>
-
   <div class="site-header">
     <div class="center-text">INFORMATION</div>
   </div>
@@ -227,16 +237,14 @@
         updateSlides();
       }
     }
-  
 
-    // Свайпы на телефоне
     let touchStartX = 0;
     let touchEndX = 0;
 
     slider.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].screenX;
     });
-    
+
     slider.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].screenX;
       handleSwipe();
@@ -246,15 +254,17 @@
       const diff = touchStartX - touchEndX;
       const minSwipeDistance = 30;
       if (Math.abs(diff) > minSwipeDistance) {
-        if (diff > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
+        if (diff > 0) nextSlide();
+        else prevSlide();
       }
     }
 
     createSlides();
+
+    // Регистрируем сервис-воркер
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
   </script>
 </body>
 </html>
